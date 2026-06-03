@@ -40,6 +40,8 @@ class Background:
     # draw()
 
     # Define posições do Plano de Fundo para criar o movimento
+
+    ##Da pra gente converter tudo em uma função só e simplicar tudo com um loop.
     def move (self, screen, movL_x, movL_y, movR_x, movR_y):
 
         #movimento background
@@ -199,7 +201,7 @@ class Game:
             # se soltar qualquer tecla, não faz nada
             if event.type == pygame.KEYUP:
                 if event.key == self.ESQUERDA or event.key == self.DIREITA:
-                    self.mudar_x = 0
+                    self.mudar_x = 0 
 
     # handle_events()
 
@@ -217,6 +219,7 @@ class Game:
     # draw_player()
 
     # Desenha Hazard
+    ##switch case aqui pra deixar elegante
     def draw_hazard (self, hzrd, x, y):
         if hzrd == 0:
             self.hazard_1.draw(self.screen, x, y)
@@ -384,5 +387,6 @@ def main():
 # main()
 
 # Chama a função main
+##Precisa disso? nao é só rodar a main?
 if __name__ == '__main__':
     main()
