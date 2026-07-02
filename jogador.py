@@ -1,6 +1,7 @@
 import pygame
 import random
 import time
+from arquivos import CarregarArquivos
 
 class Jogador:
     """
@@ -10,7 +11,8 @@ class Jogador:
 
     def __init__(self, x = None, y= None):
         self.image = None
-        player_fig = pygame.image.load("Images/player.png")
+        self.CarregarArquivos = CarregarArquivos() #Para acessar o dicionário centralizado (composição)
+        player_fig = self.CarregarArquivos.imagem("player")
         player_fig.convert()
         player_fig = pygame.transform.scale(player_fig, (90, 90))
         self.image = player_fig

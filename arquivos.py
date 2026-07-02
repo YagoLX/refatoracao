@@ -18,7 +18,7 @@ class CarregarArquivos:
 
     def carregar_tudo(self):
         self.imagens = {
-            "ameaca": self.concatenar("background.png"),
+            "ameaca": self.concatenar("ameaca.png"),
             "background": self.concatenar("background.png"),
             "cometa": self.concatenar("cometa.png"),
             "game_over": self.concatenar("Game_Over.png"),

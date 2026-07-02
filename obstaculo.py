@@ -1,6 +1,7 @@
 import pygame
 import random
 import time
+from arquivos import CarregarArquivos
 
 
 class Obstaculos:
@@ -9,12 +10,14 @@ class Obstaculos:
     image = None
     hazard_fig = None
 
-    imagens = ["Images/nave.png",
-               "Images/satelite.png",
-               "Images/cometa.png",
-               "Images/planeta.png",
-               "Images/ameaca.png"]
+    chaves = ["nave",
+             "satelite",
+             "cometa",
+             "planeta",
+             "ameaca"]
  
+    def __init__(self):
+        self.CarregarArquivos = CarregarArquivos() #Para acessar o dicionário centralizado (composição)
 
     def criar(self):
         if self.yo > 600:
@@ -28,7 +31,7 @@ class Obstaculos:
             pontuacao = o_passados * 10
 
     def renderizar(self, tipo):
-        self.hazard_fig = pygame.image.load(self.imagens[tipo])
+        self.hazard_fig = self.CarregarArquivos.imagem(self.chaves[tipo])
         self.hazard_fig.convert()
         self.hazard_fig = pygame.transform.scale(self.hazard_fig, (130, 130))
 
