@@ -17,9 +17,6 @@ class Jogo:
     render_text_bateulateral = None
     render_text_perdeu = None
 
-    # movimento do Player
-    DIREITA = pygame.K_RIGHT
-    ESQUERDA = pygame.K_LEFT
     mudar_x = 0.0
 
 
@@ -51,24 +48,23 @@ class Jogo:
         """
         Trata o evento e toma a ação necessária.
         """
-        for event in pygame.event.get():
 
+        for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.run = False
 
-            # se clicar em qualquer tecla, entra no if
-            if event.type == pygame.KEYDOWN:
-                # se clicar na seta da esquerda, anda 3 para a esquerda no eixo x
-                if event.key == self.ESQUERDA:
-                    self.mudar_x = -3
-                # se clicar na seta da direita, anda 3 para a direita no eixo x
-                if event.key == self.DIREITA:
-                    self.mudar_x = 3
+            teclas = pygame.key.get_pressed()
 
-            # se soltar qualquer tecla, não faz nada
-            if event.type == pygame.KEYUP:
-                if event.key == self.ESQUERDA or event.key == self.DIREITA:
-                    self.mudar_x = 0 
+            if teclas[pygame.K_a] or teclas[pygame.K_LEFT]:
+                self.mudar_x = -3
+                # se clicar na seta da direita, anda 3 para a direita no eixo x
+            if teclas[pygame.K_d] or teclas[pygame.K_RIGHT]:
+                self.mudar_x = 3
+
+            # se soltar qualquer tecla, não faz nad
+
+            ##aqui precisa mudar mais uma coisa. Se tiver apertando uma tecla e levantar a outra quebra tudi
+            ##precisa consertara
 
     # handle_events()
 
@@ -84,20 +80,20 @@ class Jogo:
     def draw_player (self, x, y):
         self.player.draw (self.screen, x, y)
     # draw_player()
-
+ 
     # Desenha Hazard
-    ##switch case aqui pra deixar elegante
     def draw_hazard (self, hzrd, x, y):
-        if hzrd == 0:
-            self.hazard_1.draw(self.screen, x, y)
-        elif hzrd == 1:
-            self.hazard_2.draw(self.screen, x, y)
-        elif hzrd == 2:
-            self.hazard_3.draw(self.screen, x, y)
-        elif hzrd == 3:
-            self.hazard_4.draw(self.screen, x, y)
-        elif hzrd == 4:
-            self.hazard_5.draw(self.screen, x, y)
+        match hzrd:
+            case 0:
+                self.hazard_1.draw(self.screen, x, y)
+            case 1:
+                self.hazard_2.draw(self.screen, x, y)
+            case 2:
+                self.hazard_3.draw(self.screen, x, y)
+            case 3:
+                self.hazard_4.draw(self.screen, x, y)
+            case 4:
+                self.hazard_5.draw(self.screen, x, y)
     # draw_hazard()
 
     # Define as posições dos objetos para criar o movimento
@@ -245,4 +241,4 @@ class Jogo:
 
         # while self.run
     # loop()
-# Game:
+# Game:   
