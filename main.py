@@ -1,4 +1,4 @@
 from jogo import Jogo
 
-game = Jogo("resolution", "fullscreen")
+game = Jogo()
 game.loop()

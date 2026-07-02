@@ -2,130 +2,67 @@ import pygame
 import random
 import time
 from jogador import Jogador
-from obstaculo import Obstaculo
+from obstaculo import Obstaculos
 from fundo import Fundo
+from eventos import Eventos
+from colisao import Colisao
+from interface import Interface
 
 class Jogo:
-    screen = None
-    screen_size = None
-    width = 800
-    height = 600
+    tela = None
+    tam_tela = None
     run = True
     background = None
     player = None
     hazard_1 = hazard_2 = hazard_3 = hazard_4 = hazard_5 = None
-    render_text_bateulateral = None
-    render_text_perdeu = None
+    eventos = Eventos(372,475)
+    interface = None
+    obstaculos = Obstaculos()
 
-    mudar_x = 0.0
-
-
-    def __init__(self, size, fullscreen):
+    def __init__(self):
 
         """
         Função que inicializa o pygame, define a resolução da tela,
         caption, e desabilita o mouse.
         """
-
         pygame.init()
 
-        self.screen = pygame.display.set_mode((self.width, self.height))  # tamanho da tela
-        self.screen_size = self.screen.get_size()
+        self.tela = pygame.display.set_mode((800, 600))  # tamanho da tela
+        self.tam_tela = self.tela.get_size()
 
         pygame.mouse.set_visible(0)
         pygame.display.set_caption('Viagem Espacial')
 
-        # fontes
-        my_font = pygame.font.Font("Fonts/Fonte4.ttf", 100)
-
-        # Mensagens para o jogador
-        self.render_text_bateulateral = my_font.render("COLISÃO!", 0,(255, 255, 255))  # ("texto", opaco/transparente 0/1, cor do texto)
-        self.render_text_perdeu = my_font.render("GAME OVER!", 0, (255, 0, 0))  # ("texto, opaco/transparente 0/1, cor do texto)
-
-    # init()
-
-    def handle_events(self):
-        """
-        Trata o evento e toma a ação necessária.
-        """
-
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                self.run = False
-
-            teclas = pygame.key.get_pressed()
-
-            if teclas[pygame.K_a] or teclas[pygame.K_LEFT]:
-                self.mudar_x = -3
-                # se clicar na seta da direita, anda 3 para a direita no eixo x
-            if teclas[pygame.K_d] or teclas[pygame.K_RIGHT]:
-                self.mudar_x = 3
-
-            # se soltar qualquer tecla, não faz nad
-
-            ##aqui precisa mudar mais uma coisa. Se tiver apertando uma tecla e levantar a outra quebra tudi
-            ##precisa consertara
-
-    # handle_events()
+        self.interface = Interface()
 
     def elements_update(self, dt):
         self.background.update(dt)
-    # elements_update()
 
     def elements_draw(self):
-        self.background.draw(self.screen)
-    # elements_draw()
+        self.background.draw(self.tela)
 
     # Desenha o Player
     def draw_player (self, x, y):
-        self.player.draw (self.screen, x, y)
-    # draw_player()
+        self.player.draw (self.tela, x, y)
  
-    # Desenha Hazard
-    def draw_hazard (self, hzrd, x, y):
-        match hzrd:
-            case 0:
-                self.hazard_1.draw(self.screen, x, y)
-            case 1:
-                self.hazard_2.draw(self.screen, x, y)
-            case 2:
-                self.hazard_3.draw(self.screen, x, y)
-            case 3:
-                self.hazard_4.draw(self.screen, x, y)
-            case 4:
-                self.hazard_5.draw(self.screen, x, y)
-    # draw_hazard()
-
     # Define as posições dos objetos para criar o movimento
     def move_background (self, obj_movL_x, obj_movL_y, obj_movR_x, obj_movR_y):
-        self.background.mover (self.screen, obj_movL_x, obj_movL_y, obj_movR_x,obj_movR_y)
-    # move_background()
+        self.background.mover (self.tela, obj_movL_x, obj_movL_y, obj_movR_x,obj_movR_y)
 
     # Informa a quantidade de hazard que passaram e a Pontuação
-    def score_card(self, screen, h_passou, score):
-        font = pygame.font.SysFont(None, 35)
-        passou = font.render("Passou: " + str(h_passou), True, (255, 255, 128))
-        score = font.render("Score: " + str(score), True, (253, 231, 32))
-        screen.blit(passou, (0, 50))
-        screen.blit(score, (0, 100))
-    #score_card()
 
     def loop(self):
-        """
-        Laço principal
-        """
-        score = 0
-        h_passou = 0
+        pontuacao = 0
+        o_passados = 0
 
         # variáveis para movimento de Plano de Fundo/Background
         velocidade_background = 5
-        velocidade_hazard = 7
+        velocidade_obstaculo = 7
 
-        faixaA_x = 375
-        faixaA_y = 0
-        hzrd = 0
-        h_x = random.randrange(125, 660)
-        h_y = -500
+        tipo_obstaculo = 0
+        self.obstaculos.renderizar(tipo_obstaculo)
+        xo = random.randrange(125, 660)
+        yo = -500
 
         # Info Hazard
         h_width = 130 #55
@@ -143,26 +80,11 @@ class Jogo:
         self.background = Fundo()
 
         # Posicao do Player
-        x = (self.width - 56) / 2
-        y = self.height - 125
+        x = 372
+        y = 475
 
         # Criar o Player
         self.player = Jogador(x, y)
-
-        # Criar Harzard_1
-        self.hazard_1 = Obstaculo("Images/nave.png", h_x, h_y)
-
-        # Criar Harzard_2
-        self.hazard_2 = Obstaculo("Images/satelite.png", h_x, h_y)
-
-        # Criar Harzard_3
-        self.hazard_3 = Obstaculo("Images/cometa.png", h_x, h_y)
-
-        # Criar Harzard_4
-        self.hazard_4 = Obstaculo("Images/planeta.png", h_x, h_y)
-
-        # Criar Harzard_5
-        self.hazard_5 = Obstaculo("Images/ameaca.png", h_x, h_y)
 
         # Inicializamos o relogio e o dt que vai limitar o valor de FPS
         # frames por segundo do jogo
@@ -171,10 +93,15 @@ class Jogo:
 
         # assim iniciamos o loop principal do programa
         while self.run:
+
             clock.tick(1000 / dt)
 
-            # Handle Input Events
-            self.handle_events()
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+
+            self.eventos.controle()
+            x = self.eventos.atualizar()
 
             # Atualiza Elementos
             self.elements_update(dt)
@@ -194,45 +121,40 @@ class Jogo:
                 movR_y -= 640
 
             # Altera a coordenada x do Player de acordo comas mudanças no event_handle() para ele se mover
-            x = x + self.mudar_x
 
             # Mostrar Player
-            self.draw_player (x, y)
+            self.draw_player(self.eventos.x, y)
 
             # Mostrar score
-            self.score_card(self.screen, h_passou, score)
+            self.interface.pontuacao(self.tela, o_passados, pontuacao)
 
             # Restrições do movimento do Player
             # Se o Player bate na lateral não é Game Over
             if x > 760 - 92 or x < 40 + 5:
-                self.screen.blit(self.render_text_bateulateral, (80, 200))
-                pygame.display.update()  # atualizar a tela
-                time.sleep(3)
+                self.interface.msg_colisao("lateral", self.tela)
                 self.loop()
                 self.run = False
 
-            # adicionando movimento ao hazard
-            h_y = h_y + velocidade_hazard / 4
-            self.draw_hazard(hzrd, h_x, h_y)
-            h_y = h_y + velocidade_hazard
+            # loop que redesenha continuamente a posicao
+            yo = yo + velocidade_obstaculo/4
+            self.obstaculos.draw(self.tela,xo,yo)
+            yo = yo + velocidade_obstaculo
 
             # definindo onde hazard vai aparecer, recomeçando a posição do obstaculo e da faixa
-            if h_y > self.height:
-                h_y = 0 - h_height
-                faixaA_y = 0
-                h_x = random.randrange(125, 650 - h_height)
-                hzrd = random.randint(0, 4)
+            if yo > 600:
+                yo = 0 - h_height
+                xo = random.randrange(125, 650 - h_height)
+                tipo_obstaculo = random.randint(0, 4)
                 # determinando quantos hazard passaram e a pontuação
-                h_passou = h_passou + 1
-                score = h_passou * 10
+                o_passados += 1
+                pontuacao = o_passados * 10
+                self.obstaculos.renderizar(tipo_obstaculo)
 
             # restrições para o game over
-            if y < h_y + h_height:
-                if x > h_x or x > h_x - 56:
-                    if x < h_x + h_width or x < h_x - 56:
-                        self.screen.blit(self.render_text_perdeu, (80, 200))
-                        pygame.display.update()
-                        time.sleep(3)
+            if y < yo + h_height:
+                if x > xo or x > xo - 56:
+                    if x < xo + h_width or x < xo - 56:
+                        self.interface.msg_colisao("perdeu", self.tela)
                         self.run = False
 
             # atualizando a tela
