@@ -37,12 +37,12 @@ class Fundo:
     # draw()
     def _desenhar_repetido(self, tela, imagem, x, y):
     # Desenha a imagem atual e as que ficam abaixo
-        for offset in range(0, 3001, 600):
-            tela.blit(imagem, (x, y + offset))
+        for deslocamento in range(0, 3001, 600):
+            tela.blit(imagem, (x, y + deslocamento))
 
     # Desenha as que ficam acima
-        for offset in range(-600, -4801, -600):
-            tela.blit(imagem, (x, y + offset))
+        for deslocamento in range(-600, -4801, -600):
+            tela.blit(imagem, (x, y + deslocamento))
         
     # Define posições do Plano de Fundo para criar o movimento
 
