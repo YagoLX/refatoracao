@@ -35,6 +35,7 @@ class Fundo:
         screen.blit(self.margin_left, (0, 0))
         screen.blit(self.margin_right, (740, 0))
     # draw()
+    
     def _desenhar_repetido(self, tela, imagem, x, y):
     # Desenha a imagem atual e as que ficam abaixo
         for deslocamento in range(0, 3001, 600):
