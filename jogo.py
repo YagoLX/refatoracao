@@ -4,21 +4,18 @@ import time
 from jogador import Jogador
 from obstaculo import Obstaculo
 from fundo import Fundo
+from eventos import Eventos
 
 class Jogo:
     screen = None
     screen_size = None
-    width = 800
-    height = 600
     run = True
     background = None
     player = None
     hazard_1 = hazard_2 = hazard_3 = hazard_4 = hazard_5 = None
     render_text_bateulateral = None
     render_text_perdeu = None
-
-    mudar_x = 0.0
-
+    eventos = Eventos(372,475)
 
     def __init__(self, size, fullscreen):
 
@@ -29,7 +26,7 @@ class Jogo:
 
         pygame.init()
 
-        self.screen = pygame.display.set_mode((self.width, self.height))  # tamanho da tela
+        self.screen = pygame.display.set_mode((800, 600))  # tamanho da tela
         self.screen_size = self.screen.get_size()
 
         pygame.mouse.set_visible(0)
@@ -43,31 +40,6 @@ class Jogo:
         self.render_text_perdeu = my_font.render("GAME OVER!", 0, (255, 0, 0))  # ("texto, opaco/transparente 0/1, cor do texto)
 
     # init()
-
-    def handle_events(self):
-        """
-        Trata o evento e toma a ação necessária.
-        """
-
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                self.run = False
-
-            teclas = pygame.key.get_pressed()
-
-            if teclas[pygame.K_a] or teclas[pygame.K_LEFT]:
-                self.mudar_x = -3
-                # se clicar na seta da direita, anda 3 para a direita no eixo x
-            if teclas[pygame.K_d] or teclas[pygame.K_RIGHT]:
-                self.mudar_x = 3
-
-            # se soltar qualquer tecla, não faz nad
-
-            ##aqui precisa mudar mais uma coisa. Se tiver apertando uma tecla e levantar a outra quebra tudi
-            ##precisa consertara
-
-    # handle_events()
-
     def elements_update(self, dt):
         self.background.update(dt)
     # elements_update()
@@ -111,9 +83,6 @@ class Jogo:
     #score_card()
 
     def loop(self):
-        """
-        Laço principal
-        """
         score = 0
         h_passou = 0
 
@@ -121,8 +90,6 @@ class Jogo:
         velocidade_background = 5
         velocidade_hazard = 7
 
-        faixaA_x = 375
-        faixaA_y = 0
         hzrd = 0
         h_x = random.randrange(125, 660)
         h_y = -500
@@ -143,8 +110,8 @@ class Jogo:
         self.background = Fundo()
 
         # Posicao do Player
-        x = (self.width - 56) / 2
-        y = self.height - 125
+        x = 372
+        y = 475
 
         # Criar o Player
         self.player = Jogador(x, y)
@@ -171,10 +138,15 @@ class Jogo:
 
         # assim iniciamos o loop principal do programa
         while self.run:
+
             clock.tick(1000 / dt)
 
-            # Handle Input Events
-            self.handle_events()
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+
+            self.eventos.controle()
+            x = self.eventos.atualizar()
 
             # Atualiza Elementos
             self.elements_update(dt)
@@ -194,10 +166,9 @@ class Jogo:
                 movR_y -= 640
 
             # Altera a coordenada x do Player de acordo comas mudanças no event_handle() para ele se mover
-            x = x + self.mudar_x
 
             # Mostrar Player
-            self.draw_player (x, y)
+            self.draw_player(self.eventos.x, y)
 
             # Mostrar score
             self.score_card(self.screen, h_passou, score)
@@ -217,7 +188,7 @@ class Jogo:
             h_y = h_y + velocidade_hazard
 
             # definindo onde hazard vai aparecer, recomeçando a posição do obstaculo e da faixa
-            if h_y > self.height:
+            if h_y > 600:
                 h_y = 0 - h_height
                 faixaA_y = 0
                 h_x = random.randrange(125, 650 - h_height)
