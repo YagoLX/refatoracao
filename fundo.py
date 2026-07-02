@@ -47,7 +47,7 @@ class Fundo:
     # Define posições do Plano de Fundo para criar o movimento
 
     ##Da pra gente converter tudo em uma função só e simplicar tudo com um loop.
-    def move (self, screen, movL_x, movL_y, movR_x, movR_y):
+    def mover (self, screen, movL_x, movL_y, movR_x, movR_y):
 
         #movimento background
         self._desenhar_repetido(screen, self.image, movL_x, movL_y)

@@ -102,7 +102,7 @@ class Jogo:
 
     # Define as posições dos objetos para criar o movimento
     def move_background (self, obj_movL_x, obj_movL_y, obj_movR_x, obj_movR_y):
-        self.background.move (self.screen, obj_movL_x, obj_movL_y, obj_movR_x,obj_movR_y)
+        self.background.mover (self.screen, obj_movL_x, obj_movL_y, obj_movR_x,obj_movR_y)
     # move_background()
 
     # Informa a quantidade de hazard que passaram e a Pontuação
