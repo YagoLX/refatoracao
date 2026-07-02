@@ -6,88 +6,56 @@ class Fundo:
     """
     Esta classe define o Plano de Fundo do jogo
     """
-    image = None
-    margin_left = None
-    margin_right = None
 
     def __init__(self):
+        self.image = None
+        self.margin_left = None
+        self.margin_right = None
+        self.image = self._carregar_imagem("Images/background.png")
+        self.margin_left= self._carregar_imagem("Images/margin_1.png", (60, 600))
 
-        background_fig = pygame.image.load("Images/background.png")
-        background_fig.convert()
-        self.image = background_fig
-
-        margin_left_fig = pygame.image.load("Images/margin_1.png")
-        margin_left_fig.convert()
-        margin_left_fig = pygame.transform.scale(margin_left_fig, (60, 600))
-        self.margin_left = margin_left_fig
-
-        margin_right_fig = pygame.image.load("Images/margin_2.png")
-        margin_right_fig.convert()
-        margin_right_fig = pygame.transform.scale(margin_right_fig, (60, 600))
-        self.margin_right = margin_right_fig
+        self. margin_right = self._carregar_imagem("Images/margin_2.png", (60,600))
     # __init__()
-
+    
     def update(self, dt):
         pass
     # update()
+    def _carregar_imagem(self, caminho, tamanho = None):
+        imagem = pygame.image.load(caminho)
+        imagem = imagem.convert()
+
+        if tamanho:
+            imagem = pygame.transform.scale(imagem,tamanho)
+        
+        return imagem
+
 
     def draw(self, screen):
         screen.blit(self.image, (0, 0))
         screen.blit(self.margin_left, (0, 0))
         screen.blit(self.margin_right, (740, 0))
     # draw()
+    def _desenhar_repetido(self, tela, imagem, x, y):
+    # Desenha a imagem atual e as que ficam abaixo
+        for offset in range(0, 3001, 600):
+            tela.blit(imagem, (x, y + offset))
 
+    # Desenha as que ficam acima
+        for offset in range(-600, -4801, -600):
+            tela.blit(imagem, (x, y + offset))
+        
     # Define posições do Plano de Fundo para criar o movimento
 
     ##Da pra gente converter tudo em uma função só e simplicar tudo com um loop.
     def move (self, screen, movL_x, movL_y, movR_x, movR_y):
 
         #movimento background
-        screen.blit(self.image, (movL_x, movL_y))
-        screen.blit(self.image, (movL_x, movL_y + 600))
-        screen.blit(self.image, (movL_x, movL_y + 1200))
-        screen.blit(self.image, (movL_x, movL_y + 1800))
-        screen.blit(self.image, (movL_x, movL_y + 2400))
-        screen.blit(self.image, (movL_x, movL_y + 3000))
-        screen.blit(self.image, (movL_x, movL_y - 600))
-        screen.blit(self.image, (movL_x, movL_y - 1200))
-        screen.blit(self.image, (movL_x, movL_y - 1800))
-        screen.blit(self.image, (movL_x, movL_y - 2400))
-        screen.blit(self.image, (movL_x, movL_y - 3000))
-        screen.blit(self.image, (movL_x, movL_y - 3600))
-        screen.blit(self.image, (movL_x, movL_y - 4200))
-        screen.blit(self.image, (movL_x, movL_y - 4800))
+        self._desenhar_repetido(screen, self.image, movL_x, movL_y)
 
         # movimento margem esquerda
-        screen.blit(self.margin_left, (movL_x, movL_y))
-        screen.blit(self.margin_left, (movL_x, movL_y + 600))
-        screen.blit(self.margin_left, (movL_x, movL_y + 1200))
-        screen.blit(self.margin_left, (movL_x, movL_y + 1800))
-        screen.blit(self.margin_left, (movL_x, movL_y + 2400))
-        screen.blit(self.margin_left, (movL_x, movL_y + 3000))
-        screen.blit(self.margin_left, (movL_x, movL_y - 600))
-        screen.blit(self.margin_left, (movL_x, movL_y - 1200))
-        screen.blit(self.margin_left, (movL_x, movL_y - 1800))
-        screen.blit(self.margin_left, (movL_x, movL_y - 2400))
-        screen.blit(self.margin_left, (movL_x, movL_y - 3000))
-        screen.blit(self.margin_left, (movL_x, movL_y - 3600))
-        screen.blit(self.margin_left, (movL_x, movL_y - 4200))
-        screen.blit(self.margin_left, (movL_x, movL_y - 4800))
+        self._desenhar_repetido(screen, self.margin_left, movL_x, movL_y)
 
         # movimento margem direita
-        screen.blit(self.margin_right, (movR_x, movR_y))
-        screen.blit(self.margin_right, (movR_x, movR_y + 600))
-        screen.blit(self.margin_right, (movR_x, movR_y + 1200))
-        screen.blit(self.margin_right, (movR_x, movR_y + 1800))
-        screen.blit(self.margin_right, (movR_x, movR_y + 2400))
-        screen.blit(self.margin_right, (movR_x, movR_y + 3000))
-        screen.blit(self.margin_right, (movR_x, movR_y - 600))
-        screen.blit(self.margin_right, (movR_x, movR_y - 1200))
-        screen.blit(self.margin_right, (movR_x, movR_y - 1800))
-        screen.blit(self.margin_right, (movR_x, movR_y - 2400))
-        screen.blit(self.margin_right, (movR_x, movR_y - 3000))
-        screen.blit(self.margin_right, (movR_x, movR_y - 3600))
-        screen.blit(self.margin_right, (movR_x, movR_y - 4200))
-        screen.blit(self.margin_right, (movR_x, movR_y - 4800))
+        self._desenhar_repetido(screen, self.margin_right, movR_x, movR_y)
     # move()
 # Background:

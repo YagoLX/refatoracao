@@ -17,7 +17,7 @@ vide comentários no código, comentei com ##, basta dar um ctrl+F e procurar ##
 
 De maneira geral, acredito que o principal ponto pra gente melhorar a refatorar é quebrar o código em diferentes arquivos
 
-Criar um arquivo para 
+Criar um arquivo para
 -Background
 -Player
 -Main
@@ -27,7 +27,7 @@ Criar um arquivo para
 ## Lista Proposta
 1 - Todos os nomes em portugues, nomeclatura padrao como mudar_x -> velocidade_x; h_passou -> obstaculos_passados; bateulateral -> colisao_lateral
 2 - Separar a Classe Game em Eventos, Interface e Colisoes
-3 - Corrigir Background.move() trocar 14 chamadas de screen.blit() por método auxiliar
+3 - Corrigir Background.move() trocar 14 chamadas de screen.blit() por método auxiliar - FEITO
 4 - Substituir hazard_1 ... hazard_muitos e série de if/else do draw_hazard() por lista e iterações
 5 - Migração de atributos de classe -> atributo de instancia: colocar atributos de estado como image, x e y nas classes Background, Player, Hazard e Game. Manter no corpo só coisas realmente que são compartilhadas (ex: width e height da classe Game)
 6 - Substituir recursão por máquina de estados
