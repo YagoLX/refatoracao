@@ -45,20 +45,6 @@ class Jogo:
     def draw_player (self, x, y):
         self.player.draw (self.tela, x, y)
  
-    # Desenha Hazard
-    # def draw_hazard (self, hzrd, x, y):
-    #     match hzrd:
-    #         case 0:
-    #             self.hazard_1.draw(self.tela, x, y)
-    #         case 1:
-    #             self.hazard_2.draw(self.tela, x, y)
-    #         case 2:
-    #             self.hazard_3.draw(self.tela, x, y)
-    #         case 3:
-    #             self.hazard_4.draw(self.tela, x, y)
-    #         case 4:
-    #             self.hazard_5.draw(self.tela, x, y)
-
     # Define as posições dos objetos para criar o movimento
     def move_background (self, obj_movL_x, obj_movL_y, obj_movR_x, obj_movR_y):
         self.background.mover (self.tela, obj_movL_x, obj_movL_y, obj_movR_x,obj_movR_y)
@@ -99,21 +85,6 @@ class Jogo:
 
         # Criar o Player
         self.player = Jogador(x, y)
-
-        # # Criar Harzard_1
-        # self.hazard_1 = Obstaculos("Images/nave.png", xo, yo)
-
-        # # Criar Harzard_2
-        # self.hazard_2 = Obstaculos("Images/satelite.png", xo, yo)
-
-        # # Criar Harzard_3
-        # self.hazard_3 = Obstaculos("Images/cometa.png", xo, yo)
-
-        # # Criar Harzard_4
-        # self.hazard_4 = Obstaculos("Images/planeta.png", xo, yo)
-
-        # # Criar Harzard_5
-        # self.hazard_5 = Obstaculos("Images/ameaca.png", xo, yo)
 
         # Inicializamos o relogio e o dt que vai limitar o valor de FPS
         # frames por segundo do jogo
@@ -166,7 +137,6 @@ class Jogo:
 
             # loop que redesenha continuamente a posicao
             yo = yo + velocidade_obstaculo/4
-            # self.draw_hazard(tipo_obstaculo, xo, yo)
             self.obstaculos.draw(self.tela,xo,yo)
             yo = yo + velocidade_obstaculo
 
