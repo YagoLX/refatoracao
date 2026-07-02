@@ -23,3 +23,17 @@ Criar um arquivo para
 -Main
 -Detectar colisão
 -Rodar a interface
+
+## Lista Proposta
+1 - Todos os nomes em portugues, nomeclatura padrao como mudar_x -> velocidade_x; h_passou -> obstaculos_passados; bateulateral -> colisao_lateral
+2 - Separar a Classe Game em Eventos, Interface e Colisoes
+3 - Corrigir Background.move() trocar 14 chamadas de screen.blit() por método auxiliar
+4 - Substituir hazard_1 ... hazard_muitos por e série de if/else do draw_hazard()
+5 - Migração de atributos de classe -> atributo de instancia: colocar atributos de estado como image, x e y nas classes Background, Player, Hazard e Game. Manter no corpo só coisas realmente que são compartilhadas (ex: width e height da classe Game)
+6 - Substituir recursão por máquina de estados
+7 - Ajeitar colisão por métodos mais consolidados do pygame
+
+## Outras Partes do Entregável
+- Lista de Refatoração feita 
+- Diagrama de classe do código refatorado
+- Video???
