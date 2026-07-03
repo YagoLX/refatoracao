@@ -1,19 +1,17 @@
 import pygame
 import random
-import time
-from jogador import Jogador
-from obstaculo import Obstaculos
 from fundo import Fundo
 from eventos import Eventos
 from colisao import Colisao
 from interface import Interface
+from elementos import *
 
 class Jogo:
     tela = None
     tam_tela = None
     run = True
     background = None
-    player = None
+    jogador = None
     hazard_1 = hazard_2 = hazard_3 = hazard_4 = hazard_5 = None
     eventos = Eventos(372,475)
     interface = None
@@ -34,29 +32,12 @@ class Jogo:
         pygame.display.set_caption('Viagem Espacial')
 
         self.interface = Interface()
-
-    def elements_update(self, dt):
-        self.background.update(dt)
-
-    def elements_draw(self):
-        self.background.draw(self.tela)
-
-    # Desenha o Player
-    def draw_player (self, x, y):
-        self.player.draw (self.tela, x, y)
  
-    # Define as posições dos objetos para criar o movimento
-    def move_background (self, obj_movL_x, obj_movL_y, obj_movR_x, obj_movR_y):
-        self.background.mover (self.tela, obj_movL_x, obj_movL_y, obj_movR_x,obj_movR_y)
-
-    # Informa a quantidade de hazard que passaram e a Pontuação
-
     def loop(self):
         pontuacao = 0
         o_passados = 0
 
         # variáveis para movimento de Plano de Fundo/Background
-        velocidade_background = 5
         velocidade_obstaculo = 7
 
         tipo_obstaculo = 0
@@ -65,16 +46,8 @@ class Jogo:
         yo = -500
 
         # Info Hazard
-        h_width = 130 #55
-        h_height = 130 #120
-
-        # movimento da margem esquerda
-        movL_x = 0
-        movL_y = 0
-
-        # movimento da margem direita
-        movR_x = 740
-        movR_y = 0
+        largura_o = 130 #55
+        altura_o = 130 #120
 
         # Criar o Plano de fundo
         self.background = Fundo()
@@ -84,46 +57,32 @@ class Jogo:
         y = 475
 
         # Criar o Player
-        self.player = Jogador(x, y)
+        self.jogador = Jogador(x, y)
 
         # Inicializamos o relogio e o dt que vai limitar o valor de FPS
         # frames por segundo do jogo
         clock = pygame.time.Clock()
-        dt = 16
+        dt = 0
 
         # assim iniciamos o loop principal do programa
         while self.run:
 
-            clock.tick(1000 / dt)
+            dt = clock.tick(90)/1000.0
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
 
+            #controle do jogador
             self.eventos.controle()
             x = self.eventos.atualizar()
 
-            # Atualiza Elementos
-            self.elements_update(dt)
-
-            # Desenha o background buffer
-            self.elements_draw()
-
-            # adiciona movimento ao background
-
-            self.move_background (movL_x, movL_y, movR_x, movR_y)
-            movL_y = movL_y + velocidade_background
-            movR_y = movR_y + velocidade_background
-
-            #se a imagem ultrapassar a extremidade da tela, move de volta
-            if movL_y > 640 and movR_y > 640:
-                movL_y -= 640
-                movR_y -= 640
-
-            # Altera a coordenada x do Player de acordo comas mudanças no event_handle() para ele se mover
+            #atualizacao do fundo
+            self.background.update(dt)
+            self.background.draw(self.tela)
 
             # Mostrar Player
-            self.draw_player(self.eventos.x, y)
+            self.jogador.draw(self.tela, self.eventos.x, y)
 
             # Mostrar score
             self.interface.pontuacao(self.tela, o_passados, pontuacao)
@@ -136,14 +95,13 @@ class Jogo:
                 self.run = False
 
             # loop que redesenha continuamente a posicao
-            yo = yo + velocidade_obstaculo/4
-            self.obstaculos.draw(self.tela,xo,yo)
             yo = yo + velocidade_obstaculo
+            self.obstaculos.draw(self.tela,xo,yo)
 
             # definindo onde hazard vai aparecer, recomeçando a posição do obstaculo e da faixa
             if yo > 600:
-                yo = 0 - h_height
-                xo = random.randrange(125, 650 - h_height)
+                yo = 0 - altura_o
+                xo = random.randrange(125, 650 - altura_o)
                 tipo_obstaculo = random.randint(0, 4)
                 # determinando quantos hazard passaram e a pontuação
                 o_passados += 1
@@ -151,10 +109,10 @@ class Jogo:
                 self.obstaculos.renderizar(tipo_obstaculo)
 
             # restrições para o game over
-            if y < yo + h_height:
+            if y < yo + altura_o:
                 if x > xo or x > xo - 56:
-                    if x < xo + h_width or x < xo - 56:
-                        self.interface.msg_colisao("perdeu", self.tela)
+                    if x < xo + largura_o or x < xo - 56:
+                        self.interface.msg_colisao("perdeu", self.tela) ##convém colocar na classe colisao
                         self.run = False
 
             # atualizando a tela
