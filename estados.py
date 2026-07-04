@@ -25,7 +25,7 @@ class Jogando(EstadoJogo):
     def processar_eventos(self, eventos):
         #controle do jogador
             self.jogo.eventos.controle()
-            x = self.jogo.eventos.atualizar()
+            self.jogo.x = self.jogo.eventos.atualizar()
 
     def atualizar(self, dt):
         # loop que redesenha continuamente a posicao

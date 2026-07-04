@@ -73,7 +73,6 @@ class Jogo:
                 if evento.type == pygame.QUIT:
                     self.run = False
             
-            print (self.estado)
             # delega tudo ao estado atual
             self.estado.processar_eventos(eventos)
             self.estado.atualizar(dt)
