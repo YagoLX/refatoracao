@@ -1,4 +1,5 @@
 import pygame
+from arquivos import CarregarArquivos
 
 class Fundo:
     """
@@ -11,14 +12,18 @@ class Fundo:
         self.margin_right = None
         self.velocidade = 200
         self.y = 0
-        self.image = self._carregar_imagem("Images/background.png", (800,600))
-        self.margin_left= self._carregar_imagem("Images/margin_1.png", (60, 600))
 
-        self. margin_right = self._carregar_imagem("Images/margin_2.png", (60,600))
+        self.CarregarArquivos = CarregarArquivos() #Para acessar o dicionário centralizado (composição)
+
+        self.image = self._carregar_imagem("background", (800,600))
+        self.margin_left= self._carregar_imagem("margin_1", (60, 600))
+
+        self. margin_right = self._carregar_imagem("margin_2", (60,600))
 
 
-    def _carregar_imagem(self, caminho, tamanho = None):
-        imagem = pygame.image.load(caminho)
+    def _carregar_imagem(self, chave, tamanho = None):
+        
+        imagem = self.CarregarArquivos.imagem(chave)
         imagem = imagem.convert()
 
         if tamanho:
